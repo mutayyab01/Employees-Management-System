@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<EmployeesManagement.Models.LeaveApplication>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Rejected Leave Application";
 }
-<p>
-    <a asp-action="Create" class="btn btn-primary"> <i class="fa fa-plus"></i> Add New Leave Application</a>
-</p>
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"> Leave Application List </h3>
+        <h3 class="card-title">Rejected Leave Application List </h3>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -39,11 +36,11 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
-                   @*  <th>Edit</th>
+                    @*  <th>Edit</th>
                     <th>View</th>
                     <th>Delete</th> *@
                     <th>
-                       Actions
+                        Actions
                     </th>
                 </tr>
             </thead>
@@ -73,41 +70,36 @@
                             @Html.DisplayFor(modelItem => item.Attachment)
                         </td>
 
-                        <td class="bg-success">
+                        <td class="bg-danger">
                             @Html.DisplayFor(modelItem => item.Status.Description)
                         </td>
 
-                       @*  <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"> <i class="fa fa-pen"></i> Edit</a>
+                        @*  <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"> <i class="fa fa-pen"></i> Edit</a>
 
-                        </td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-eye"></i> View</a>
+                    </td>
+                    <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-eye"></i> View</a>
 
-                        </td>
-                        <td>
+                    </td>
+                    <td>
 
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
-                        </td> *@
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                    </td> *@
 
 
 
                         <td>
                             <div class="btn-group justify-content-center">
                                 <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown"> <span class="sr-only">Toggle Dropdown</span> Action </button>
-                               @*  <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                    <span class="sr-only">Toggle Dropdown</span>
+                                @*  <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                            <span class="sr-only">Toggle Dropdown</span>
                             </button> *@
                                 <div class="dropdown-menu" role="menu">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"> <i class="fa fa-pen"></i> Edit</a>
-                                    <div class="dropdown-divider"></div>
+
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-eye"></i> View</a>
                                     <div class="dropdown-divider"></div>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a asp-action="ApproveLeave" asp-route-id="@item.Id" class="btn btn-primary"><i class="fa fa-check"></i> Approve</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a asp-action="RejectLeave" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-check"></i> Reject</a>
+
                                 </div>
                             </div>
                         </td>
