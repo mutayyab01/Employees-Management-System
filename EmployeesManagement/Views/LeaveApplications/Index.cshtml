@@ -1,17 +1,14 @@
-﻿@model IEnumerable<EmployeesManagement.Models.Employee>
+﻿@model IEnumerable<EmployeesManagement.Models.LeaveApplication>
 
 @{
     ViewData["Title"] = "Index";
 }
-
-
-
 <p>
-    <a asp-action="Create" class="btn btn-primary"> <i class="fa fa-plus"></i> Add New Employee</a>
+    <a asp-action="Create" class="btn btn-primary"> <i class="fa fa-plus"></i> Add New Leave Application</a>
 </p>
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Employees List</h3>
+        <h3 class="card-title"> Leave Application List </h3>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -19,24 +16,29 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.EmpNo)
+                        @Html.DisplayNameFor(model => model.Employee)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FirstName)
+                        @Html.DisplayNameFor(model => model.NoOfDays)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.MiddleName)
+                        @Html.DisplayNameFor(model => model.StartDate)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.LastName)
+                        @Html.DisplayNameFor(model => model.EndDate)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.PhoneNumber)
+                        @Html.DisplayNameFor(model => model.Duration)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EmailAddress)
+                        @Html.DisplayNameFor(model => model.LeaveType)
                     </th>
-                  
+                    <th>
+                        @Html.DisplayNameFor(model => model.Attachment)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
 
                     <th>Edit</th>
                     <th>View</th>
@@ -48,24 +50,30 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.EmpNo)
+                            @Html.DisplayFor(modelItem => item.Employee.FullName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.FirstName)
+                            @Html.DisplayFor(modelItem => item.NoOfDays)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MiddleName)
+                            @Html.DisplayFor(modelItem => item.StartDate)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LastName)
+                            @Html.DisplayFor(modelItem => item.EndDate)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                            @Html.DisplayFor(modelItem => item.Duration.Description)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.EmailAddress)
+                            @Html.DisplayFor(modelItem => item.LeaveType.Name)
                         </td>
-                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Attachment)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status.Description)
+                        </td>
 
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"> <i class="fa fa-pen"></i> Edit</a>
@@ -85,4 +93,3 @@
         </table>
     </div>
 </div>
-
