@@ -14,13 +14,13 @@ namespace EmployeesManagement.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ApplicationDbContext _context;
-        public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext context)
-        {
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _signInManager = signInManager;
-            _context = context;
-        }
+            public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext context)
+            {
+                _userManager = userManager;
+                _roleManager = roleManager;
+                _signInManager = signInManager;
+                _context = context;
+            }
         public async Task<IActionResult> Index()
         {
             var users = await _context.Users.ToListAsync();

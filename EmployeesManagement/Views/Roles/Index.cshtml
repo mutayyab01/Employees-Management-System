@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<IdentityRole>;
+
+@{
+    ViewData["Title"] = "System Role";
+}
+<p>
+    <a asp-action="Create" class="btn btn-primary"> <i class="fa fa-plus"></i> Add New Role </a>
+</p>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"> Roles List </h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Role No.
+                    </th>
+                    <th>
+                        Role Name
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+
+                        <td>
+                            <div class="btn-group justify-content-center">
+                                <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown"> <span class="sr-only">Toggle Dropdown</span> Action </button>
+                                <div class="dropdown-menu" role="menu">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"> <i class="fa fa-pen"></i> Edit</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-eye"></i> View</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
