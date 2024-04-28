@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity;
-@model IEnumerable<IdentityUser>;
+@model IEnumerable<ApplicationUser>;
 
 @{
     ViewData["Title"] = "System Users";
@@ -16,17 +16,20 @@
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                  <th>
-                    User Serial No.    @* @Html.DisplayNameFor(model => model.Id) *@
+                    <th>
+                        User Full Name   
                     </th>
                     <th>
-                        User Email   @* @Html.DisplayNameFor(model => model.Email) *@
+                        Id No          
                     </th>
                     <th>
-                        User Name@* @Html.DisplayNameFor(model => model.NormalizedUserName) *@
+                       User Role           
                     </th>
                     <th>
-                        User Phone No. @* @Html.DisplayNameFor(model => model.PhoneNumber) *@
+                        User Email  
+                    </th>
+                    <th>
+                        User Phone No. 
                     </th>
                     <th>Actions</th>
                 </tr>
@@ -36,13 +39,16 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Id)
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>                  
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NationalId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Role.Name)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NormalizedUserName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.PhoneNumber)
