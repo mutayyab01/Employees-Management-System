@@ -7,26 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EmployeesManagement.Data;
 using EmployeesManagement.Models;
-using System.Security.Claims;
 
 namespace EmployeesManagement.Controllers
 {
-    public class LeaveTypesController : Controller
+    public class AuditsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public LeaveTypesController(ApplicationDbContext context)
+        public AuditsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: LeaveTypes
+        // GET: Audits
         public async Task<IActionResult> Index()
         {
-            return View(await _context.LeaveTypes.ToListAsync());
+            return View(await _context.AuditLogs.ToListAsync());
         }
 
-        // GET: LeaveTypes/Details/5
+        // GET: Audits/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,43 +33,39 @@ namespace EmployeesManagement.Controllers
                 return NotFound();
             }
 
-            var leaveType = await _context.LeaveTypes
+            var audit = await _context.AuditLogs
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (leaveType == null)
+            if (audit == null)
             {
                 return NotFound();
             }
 
-            return View(leaveType);
+            return View(audit);
         }
 
-        // GET: LeaveTypes/Create
+        // GET: Audits/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: LeaveTypes/Create
+        // POST: Audits/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Name,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] LeaveType leaveType)
+        public async Task<IActionResult> Create([Bind("Id,UserId,AuditType,TableName,DateTime,OldValues,NewValues,AffectedColumns,PrimaryKey")] Audit audit)
         {
             if (ModelState.IsValid)
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                leaveType.CreatedById = userId;
-                leaveType.CreatedOn = DateTime.Now;
-
-                _context.Add(leaveType);
-                await _context.SaveChangesAsync(userId);
+                _context.Add(audit);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(leaveType);
+            return View(audit);
         }
 
-        // GET: LeaveTypes/Edit/5
+        // GET: Audits/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,22 +73,22 @@ namespace EmployeesManagement.Controllers
                 return NotFound();
             }
 
-            var leaveType = await _context.LeaveTypes.FindAsync(id);
-            if (leaveType == null)
+            var audit = await _context.AuditLogs.FindAsync(id);
+            if (audit == null)
             {
                 return NotFound();
             }
-            return View(leaveType);
+            return View(audit);
         }
 
-        // POST: LeaveTypes/Edit/5
+        // POST: Audits/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Name,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] LeaveType leaveType)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,AuditType,TableName,DateTime,OldValues,NewValues,AffectedColumns,PrimaryKey")] Audit audit)
         {
-            if (id != leaveType.Id)
+            if (id != audit.Id)
             {
                 return NotFound();
             }
@@ -102,17 +97,12 @@ namespace EmployeesManagement.Controllers
             {
                 try
                 {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    //Get Old Values
-                    var oldleavetype = await _context.LeaveTypes.FindAsync(id);
-                    leaveType.ModifiedOn = DateTime.Now;
-                    leaveType.ModifiedById = userId;
-                    _context.Entry(oldleavetype).CurrentValues.SetValues(leaveType);
-                    await _context.SaveChangesAsync(userId);
+                    _context.Update(audit);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LeaveTypeExists(leaveType.Id))
+                    if (!AuditExists(audit.Id))
                     {
                         return NotFound();
                     }
@@ -123,10 +113,10 @@ namespace EmployeesManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(leaveType);
+            return View(audit);
         }
 
-        // GET: LeaveTypes/Delete/5
+        // GET: Audits/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,35 +124,34 @@ namespace EmployeesManagement.Controllers
                 return NotFound();
             }
 
-            var leaveType = await _context.LeaveTypes
+            var audit = await _context.AuditLogs
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (leaveType == null)
+            if (audit == null)
             {
                 return NotFound();
             }
 
-            return View(leaveType);
+            return View(audit);
         }
 
-        // POST: LeaveTypes/Delete/5
+        // POST: Audits/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var leaveType = await _context.LeaveTypes.FindAsync(id);
-            if (leaveType != null)
+            var audit = await _context.AuditLogs.FindAsync(id);
+            if (audit != null)
             {
-                _context.LeaveTypes.Remove(leaveType);
+                _context.AuditLogs.Remove(audit);
             }
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            await _context.SaveChangesAsync(userId);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LeaveTypeExists(int id)
+        private bool AuditExists(int id)
         {
-            return _context.LeaveTypes.Any(e => e.Id == id);
+            return _context.AuditLogs.Any(e => e.Id == id);
         }
     }
 }
