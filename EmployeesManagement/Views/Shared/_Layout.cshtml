@@ -30,8 +30,8 @@
     <link rel="stylesheet" href="~/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="~/AdminLTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <style>
-        .fas,.far{
-            color:white;
+        .fas, .far {
+            color: white;
         }
     </style>
 </head>
@@ -53,28 +53,28 @@
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link text-white"> <h3> Employee Management System </h3></a>
                 </li>
-               @*  <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link">Home</a>
+                @*  <li class="nav-item d-none d-sm-inline-block">
+                <a href="index3.html" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
+                <a href="#" class="nav-link">Contact</a>
                 </li> *@
             </ul>
 
             <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto" >
+            <ul class="navbar-nav ml-auto">
                 <!-- Navbar Search -->
                 <li class="nav-item">
                     <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                         <i class="fas fa-search"></i>
                     </a>
-                    <div class="navbar-search-block" >
+                    <div class="navbar-search-block">
                         <form class="form-inline">
                             <div class="input-group input-group-sm">
                                 <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
                                 <div class="input-group-append">
                                     <button class="btn btn-navbar" type="submit">
-                                        <i class="fas fa-search" ></i>
+                                        <i class="fas fa-search"></i>
                                     </button>
                                     <button class="btn btn-navbar" type="button" data-widget="navbar-search">
                                         <i class="fas fa-times"></i>
@@ -258,31 +258,50 @@
                                         <p>Rejected Leave Applications</p>
                                     </a>
                                 </li>
-                              
+
 
                             </ul>
-                    
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-table"></i>
-                            <p>
-                                System Administration
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    System Security
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a asp-controller="Users" asp-action="Index" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>System Users</p>
                                     </a>
                                 </li>
-                                  <li class="nav-item">
+                                <li class="nav-item">
                                     <a asp-controller="Roles" asp-action="Index" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>System Role</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a asp-controller="SystemProfiles" asp-action="Index" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>System Profiles</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    System Administration
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a asp-controller="Designations" asp-action="Index" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -301,33 +320,33 @@
                                         <p>Banks</p>
                                     </a>
                                 </li>
-                            <li class="nav-item">
+                                <li class="nav-item">
                                     <a asp-controller="Countries" asp-action="Index" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Countries</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Countries</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a asp-controller="Cities" asp-action="Index" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Town/Cities</p>
-                                </a>
-                            </li>
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Town/Cities</p>
+                                    </a>
+                                </li>
 
-                            <li class="nav-item">
+                                <li class="nav-item">
                                     <a asp-controller="SystemCodes" asp-action="Index" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>System Codes</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>System Codes</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a asp-controller="SystemCodeDetails" asp-action="Index" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>System Codes Details</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>System Codes Details</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
