@@ -65,16 +65,34 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Employee employee, IFormFile employeephoto)
         {
-            if (employeephoto.Length > 0)
+            if (employeephoto!=null)
             {
+                var ext = Path.GetExtension(employeephoto.FileName);
+                var size = employeephoto.Length;
+                if (ext == ".png" || ext == ".jpeg" || ext == ".jpg")
+                {
+                    if (size <= 1000000)//1Mb
+                    {
+                        var filename = "EmployeePhoto_" + DateTime.Now.ToString("dd-MM-yyyy hh mm ss tt") + "_" + employeephoto.FileName;
+                        //var path = _configuration["FileSettings:UploadFolder"]!;
+                        string folderPath = Path.Combine(webHostEnvironment.WebRootPath, "EmployeePictures");
+                        var filepath = Path.Combine(folderPath, filename);
+                        var steam = new FileStream(filepath, FileMode.Create);
+                        await employeephoto.CopyToAsync(steam);
+                        employee.Photo = filename;
+                    }
+                    else
+                    {
+                        TempData["sizeError"] = "Image Must be less Than 1 Mb";
+                        return View(employee);
+                    }
+                }
+                else
+                {
+                    TempData["extError"] = "Only PNG,JPEG,JPG Pictures Are Allowed";
+                    return View(employee);
 
-                var filename = "EmployeePhoto_" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_" + employeephoto.FileName;
-                //var path = _configuration["FileSettings:UploadFolder"]!;
-                string folderPath = Path.Combine(webHostEnvironment.WebRootPath, "EmployeePictures");
-                var filepath = Path.Combine(folderPath, filename);
-                var steam = new FileStream(filepath, FileMode.Create);
-                await employeephoto.CopyToAsync(steam);
-                employee.Photo = filename;
+                }
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
