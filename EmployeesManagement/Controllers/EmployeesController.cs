@@ -8,16 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using EmployeesManagement.Data;
 using EmployeesManagement.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EmployeesManagement.Controllers
 {
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public EmployeesController(ApplicationDbContext context)
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment webHostEnvironment;
+        public EmployeesController(ApplicationDbContext context, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _configuration = configuration;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Employees
@@ -47,7 +51,7 @@ namespace EmployeesManagement.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
-            ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x=>x.SystemCode).Where(x=>x.SystemCode.Code=="Gender"), "Id", "Description");
+            ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description");
             ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name");
             ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name");
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name");
@@ -59,19 +63,31 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( Employee employee)
+        public async Task<IActionResult> Create(Employee employee, IFormFile employeephoto)
         {
+            if (employeephoto.Length > 0)
+            {
+
+                var filename = "EmployeePhoto_" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_" + employeephoto.FileName;
+                //var path = _configuration["FileSettings:UploadFolder"]!;
+                string folderPath = Path.Combine(webHostEnvironment.WebRootPath, "EmployeePictures");
+                var filepath = Path.Combine(folderPath, filename);
+                var steam = new FileStream(filepath, FileMode.Create);
+                await employeephoto.CopyToAsync(steam);
+                employee.Photo = filename;
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             employee.CreatedById = userId;
             employee.CreatedOn = DateTime.Now;
-           
 
-                _context.Add(employee);
-                await _context.SaveChangesAsync(userId);
-                return RedirectToAction(nameof(Index));
-            
+
+            _context.Add(employee);
+            await _context.SaveChangesAsync(userId);
+            return RedirectToAction(nameof(Index));
+
             ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description", employee.GenderId);
-            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name",employee.CountryId);
+            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", employee.CountryId);
             ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name", employee.DesignationId);
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
             return View(employee);

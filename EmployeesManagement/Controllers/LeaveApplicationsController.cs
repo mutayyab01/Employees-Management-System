@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EmployeesManagement.Data;
 using EmployeesManagement.Models;
+using System.Security.Claims;
 
 namespace EmployeesManagement.Controllers
 {
@@ -130,27 +131,19 @@ namespace EmployeesManagement.Controllers
             {
                 return NotFound();
             }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             leaveApplication.ApprovedOn = DateTime.Now;
             leaveApplication.ApprovedById = "Mutayyab Imran";
             leaveApplication.StatusId = ApproveStatus.Id;
             leaveApplication.ApprovalNotes = leave.ApprovalNotes;
 
             _context.LeaveApplications.Update(leaveApplication);
-            await _context.SaveChangesAsync();
-
-
-
-
+            await _context.SaveChangesAsync(userId);
             ViewData["DurationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveDuration"), "Id", "Description");
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName");
             ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name");
 
-
-
-
             return RedirectToAction(nameof(Index));
-
-
 
         }
 
@@ -239,6 +232,8 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LeaveApplication leaveApplication)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var pendingStatus = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.Code == "AwaitingApproval" && y.SystemCode.Code == "LeaveApprovalStatus").FirstOrDefaultAsync();
             //if (ModelState.IsValid)
             //{
@@ -247,7 +242,7 @@ namespace EmployeesManagement.Controllers
             leaveApplication.CreatedById = "Mutayyab Imran";
             leaveApplication.StatusId = pendingStatus.Id;
             _context.Add(leaveApplication);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
             //}
             ViewData["DurationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveDuration"), "Id", "Description", leaveApplication.DurationId);

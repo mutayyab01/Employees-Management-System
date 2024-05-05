@@ -3,7 +3,18 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+@{
+    if (TempData["sizeError"] != null || TempData["extError"] != null || TempData["photoError"]!=null)
+    {
+        
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["sizeError"]  @TempData["extError"]  @TempData["photoError"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    }
+}
 
 <div class="card">
     <div class="card-header">
@@ -13,7 +24,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <form asp-action="Create">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-md-6">
@@ -99,6 +110,13 @@
                                 <label asp-for="DesignationId" class="control-label"></label>
                                 <select asp-for="DesignationId" class="form-control" asp-items="ViewBag.DesignationId"></select>
                                 <span asp-validation-for="DesignationId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Photo" class="control-label"></label>
+                                <input class="form-control" type="file" accept=".png,.jpg,.jpeg" id="photo" name="employeephoto" />
+                                <span asp-validation-for="Photo" class="text-danger"></span>
                             </div>
                         </div>
 
