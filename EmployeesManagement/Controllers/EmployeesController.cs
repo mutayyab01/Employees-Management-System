@@ -27,7 +27,7 @@ namespace EmployeesManagement.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            return View(await _context.Employees.Include(x => x.Status).ToListAsync());
         }
 
         // GET: Employees/Details/5
@@ -39,6 +39,7 @@ namespace EmployeesManagement.Controllers
             }
 
             var employee = await _context.Employees
+                .Include(x=>x.Status)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
@@ -51,6 +52,8 @@ namespace EmployeesManagement.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
+            ViewData["BankId"] = new SelectList(_context.Banks, "Id", "Name");
+            ViewData["EmploymentTermsId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmploymentTerms"), "Id", "Description");
             ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description");
             ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name");
             ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name");
@@ -65,6 +68,12 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Employee employee, IFormFile employeephoto)
         {
+            ViewData["BankId"] = new SelectList(_context.Banks, "Id", "Name", employee.BankId);
+            ViewData["EmploymentTermsId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmploymentTerms"), "Id", "Description", employee.EmploymentTermsId);
+            ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description", employee.GenderId);
+            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", employee.CountryId);
+            ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name", employee.DesignationId);
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
             if (employeephoto!=null)
             {
                 var ext = Path.GetExtension(employeephoto.FileName);
@@ -95,19 +104,17 @@ namespace EmployeesManagement.Controllers
                 }
             }
 
+            var StatusId = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmployeeStatus" && x.Code == "Active").FirstOrDefaultAsync();
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             employee.CreatedById = userId;
             employee.CreatedOn = DateTime.Now;
+            employee.StatusId = StatusId.Id;
 
 
             _context.Add(employee);
             await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
-
-            ViewData["GenderId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "Gender"), "Id", "Description", employee.GenderId);
-            ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", employee.CountryId);
-            ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name", employee.DesignationId);
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
+           
             return View(employee);
         }
 

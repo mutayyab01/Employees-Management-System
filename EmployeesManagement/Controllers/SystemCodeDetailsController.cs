@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EmployeesManagement.Data;
 using EmployeesManagement.Models;
+using System.Security.Claims;
 
 namespace EmployeesManagement.Controllers
 {
@@ -61,9 +62,13 @@ namespace EmployeesManagement.Controllers
         {
             //if (ModelState.IsValid)
             //{
-                _context.Add(systemCodeDetail);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            systemCodeDetail.CreatedOn = DateTime.Now;
+            systemCodeDetail.CreatedById = userId;
+
+            _context.Add(systemCodeDetail);
+            await _context.SaveChangesAsync(userId);
+            return RedirectToAction(nameof(Index));
             //}
             ViewData["SystemCodeId"] = new SelectList(_context.SystemCodes, "Id", "Description", systemCodeDetail.SystemCodeId);
             return View(systemCodeDetail);
@@ -91,7 +96,7 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,  SystemCodeDetail systemCodeDetail)
+        public async Task<IActionResult> Edit(int id, SystemCodeDetail systemCodeDetail)
         {
             if (id != systemCodeDetail.Id)
             {

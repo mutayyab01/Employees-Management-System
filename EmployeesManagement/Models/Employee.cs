@@ -2,7 +2,7 @@
 
 namespace EmployeesManagement.Models
 {
-    public class Employee: UserActivity
+    public class Employee : UserActivity
     {
         public int Id { get; set; }
         public string EmpNo { get; set; }
@@ -45,6 +45,27 @@ namespace EmployeesManagement.Models
 
         [DisplayName("Employee Photo")]
         public string? Photo { get; set; }
+        public DateTime? EmploymentDate { get; set; }
+        public int? StatusId { get; set; }
+        public SystemCodeDetail Status { get; set; }
+        public DateTime? InactiveDate { get; set; }
+        public int? CauseOfInactivityId { get; set; }
+        public SystemCodeDetail CauseOfInactivity { get; set; }
+        public DateTime? TerminationDate { get; set; }
+        public int? ReasonforTerminationId { get; set; }
+        public SystemCodeDetail ReasonforTermination { get; set; }
+        public int? BankId { get; set; }
+        public Bank Bank { get; set; }
+        public string? BankAccountNo { get; set; }
+        public string? IBAN { get; set; }
+        public string? SWIFTCode { get; set; }
+        public string? NSSFNO { get; set; }
+        public string? NHIF { get; set; }
+        public string? CompanyEmail { get; set; }
+        public string? KRAPIN { get; set; }
+        public string? PassportNo { get; set; }
+        public int? EmploymentTermsId { get; set; }
+        public SystemCodeDetail EmploymentTerms { get; set; }
 
     }
 
