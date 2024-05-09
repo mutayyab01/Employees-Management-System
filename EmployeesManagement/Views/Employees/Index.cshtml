@@ -22,19 +22,16 @@
                         @Html.DisplayNameFor(model => model.EmpNo)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.MiddleName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.LastName)
+                        @Html.DisplayNameFor(model => model.FullName)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.PhoneNumber)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.EmailAddress)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LeaveOutStandingBalance)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
@@ -53,19 +50,16 @@
                             @Html.DisplayFor(modelItem => item.EmpNo)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MiddleName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LastName)
+                            @Html.DisplayFor(modelItem => item.FullName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.PhoneNumber)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.EmailAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LeaveOutStandingBalance)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Status.Description)

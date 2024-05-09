@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EmployeesManagement.Data;
+using EmployeesManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using EmployeesManagement.Data;
-using EmployeesManagement.Models;
 using System.Security.Claims;
 
 namespace EmployeesManagement.Controllers
@@ -101,9 +97,9 @@ namespace EmployeesManagement.Controllers
             {
                 return NotFound();
             }
-            //ViewData["DurationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode), "Id", "FullName");
-            //ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName");
-            //ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name");
+            ViewData["DurationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode), "Id", "FullName");
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName");
+            ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name");
 
 
 
@@ -116,7 +112,14 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApproveLeave(LeaveApplication leave)
         {
-            var ApproveStatus = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveApprovalStatus" && y.Code == "Approved").FirstOrDefaultAsync();
+            var ApproveStatus = await _context.SystemCodeDetails
+                .Include(x => x.SystemCode)
+                .Where(y => y.SystemCode.Code == "LeaveApprovalStatus" && y.Code == "Approved")
+                .FirstOrDefaultAsync();
+            var AdjustmentType = await _context.SystemCodeDetails
+                .Include(x => x.SystemCode)
+                .Where(y => y.SystemCode.Code == "LeaveAdjustment" && y.Code == "Negative")
+                .FirstOrDefaultAsync();
 
 
 
@@ -133,12 +136,37 @@ namespace EmployeesManagement.Controllers
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             leaveApplication.ApprovedOn = DateTime.Now;
-            leaveApplication.ApprovedById = "Mutayyab Imran";
+            leaveApplication.ApprovedById = userId;
             leaveApplication.StatusId = ApproveStatus.Id;
             leaveApplication.ApprovalNotes = leave.ApprovalNotes;
 
             _context.LeaveApplications.Update(leaveApplication);
             await _context.SaveChangesAsync(userId);
+            var adjustment = new LeaveAdjustmentEntry()
+            {
+                EmployeeId = leaveApplication.EmployeeId,
+                NoOfDays = leaveApplication.NoOfDays,
+                LeaveStartDate = leaveApplication.StartDate,
+                LeaveEndDate = leaveApplication.EndDate,
+                AdjustmentDescription = "Leave Taken Negative Adjusyment",
+                LeavePeriod ="2024",
+                LeaveAdjustmentDate =DateTime.Now,
+                AdjustmentTypeId= AdjustmentType.Id,
+            };
+
+            _context.Add(adjustment);
+            await _context.SaveChangesAsync(userId);
+
+            var employee = await _context.Employees.FindAsync(leaveApplication.EmployeeId);
+            employee.LeaveOutStandingBalance = (employee.AllocatedLeaveDays - leaveApplication.NoOfDays);
+
+            _context.Update(employee);
+            await _context.SaveChangesAsync(userId);
+
+
+
+
+
             ViewData["DurationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveDuration"), "Id", "Description");
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName");
             ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name");
