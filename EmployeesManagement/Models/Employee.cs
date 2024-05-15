@@ -68,7 +68,7 @@ namespace EmployeesManagement.Models
         public SystemCodeDetail EmploymentTerms { get; set; }
         [DisplayName("Allocated Leave Balance")]
         public decimal? AllocatedLeaveDays { get; set; }
-        [DisplayName("Allocated Balance")]
+        [DisplayName("Leave Balance")]
         public decimal? LeaveOutStandingBalance { get; set; }
     }
 

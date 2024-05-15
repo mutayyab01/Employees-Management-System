@@ -2,7 +2,7 @@
 
 namespace EmployeesManagement.Models
 {
-    public class LeaveAdjustmentEntry
+    public class LeaveAdjustmentEntry :UserActivity
     {
         public int Id { get; set; }
         public string LeavePeriod { get; set; }
