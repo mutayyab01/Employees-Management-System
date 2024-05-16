@@ -49,8 +49,8 @@ namespace EmployeesManagement.Controllers
         // GET: LeaveAdjustmentEntries/Create
         public IActionResult Create()
         {
-            ViewData["AdjustmentTypeId"] = new SelectList(_context.SystemCodeDetails, "Id", "Id");
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Id");
+            ViewData["AdjustmentTypeId"] = new SelectList(_context.SystemCodeDetails, "Id", "Description");
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName");
             return View();
         }
 

@@ -12,9 +12,9 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="LeavePeriod" class="control-label"></label>
-                        <input asp-for="LeavePeriod" class="form-control" />
-                        <span asp-validation-for="LeavePeriod" class="text-danger"></span>
+                        <label asp-for="LeavePeriodId" class="control-label"></label>
+                        <select asp-for="LeavePeriodId" class="form-control" asp-items="ViewBag.LeavePeriodId"></select>
+                        <span asp-validation-for="LeavePeriodId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">

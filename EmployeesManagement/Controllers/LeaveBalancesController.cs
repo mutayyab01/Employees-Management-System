@@ -30,12 +30,15 @@ namespace EmployeesManagement.Controllers
 
             ViewData["AdjustmentTypeId"] = new SelectList(_context.SystemCodeDetails.Include(y => y.SystemCode).Where(x => x.SystemCode.Code == "LeaveAdjustment"), "Id", "Description");
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName", id);
+            ViewData["LeavePeriodId"] = new SelectList(_context.LeavePeriods.Where(x=>x.Closed==false), "Id", "Name");
+
             return View(leaveadjustment);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AdjustLeaveBalance(LeaveAdjustmentEntry leaveAdjustmentEntry)
         {
+            ViewData["LeavePeriodId"] = new SelectList(_context.LeavePeriods.Where(x => x.Closed == false), "Id", "Name", leaveAdjustmentEntry.LeavePeriodId);
             ViewData["AdjustmentTypeId"] = new SelectList(_context.SystemCodeDetails, "Id", "Description", leaveAdjustmentEntry.AdjustmentTypeId);
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName", leaveAdjustmentEntry.EmployeeId);
           
