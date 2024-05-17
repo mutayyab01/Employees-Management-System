@@ -1,5 +1,7 @@
 ﻿using EmployeesManagement.Data;
+using EmployeesManagement.Data.Migrations;
 using EmployeesManagement.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +12,14 @@ namespace EmployeesManagement.Controllers
     public class LeaveApplicationsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public LeaveApplicationsController(ApplicationDbContext context)
+        public LeaveApplicationsController(ApplicationDbContext context, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _configuration = configuration;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         // GET: LeaveApplications
@@ -149,9 +155,9 @@ namespace EmployeesManagement.Controllers
                 LeaveStartDate = leaveApplication.StartDate,
                 LeaveEndDate = leaveApplication.EndDate,
                 AdjustmentDescription = "Leave Taken Negative Adjusyment",
-                LeavePeriodId =0,
-                LeaveAdjustmentDate =DateTime.Now,
-                AdjustmentTypeId= AdjustmentType.Id,
+                LeavePeriodId = 1,
+                LeaveAdjustmentDate = DateTime.Now,
+                AdjustmentTypeId = AdjustmentType.Id,
             };
 
             _context.Add(adjustment);
@@ -258,21 +264,28 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(LeaveApplication leaveApplication)
+        public async Task<IActionResult> Create(LeaveApplication leaveApplication, IFormFile leaveattachment)
         {
+            if (leaveattachment != null)
+            {
+                var filename = "LeaveAttachment_" + DateTime.Now.ToString("dd-MM-yyyy hh mm ss tt") + "_" + leaveattachment.FileName;
+                //var path = _configuration["FileSettings:UploadFolder"]!;
+                string folderPath = Path.Combine(webHostEnvironment.WebRootPath, "LeaveAttachments");
+                var filepath = Path.Combine(folderPath, filename);
+                var steam = new FileStream(filepath, FileMode.Create);
+                await leaveattachment.CopyToAsync(steam);
+                leaveApplication.Attachment = filename;
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             var pendingStatus = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.Code == "AwaitingApproval" && y.SystemCode.Code == "LeaveApprovalStatus").FirstOrDefaultAsync();
-            //if (ModelState.IsValid)
-            //{
-
             leaveApplication.CreatedOn = DateTime.Now;
             leaveApplication.CreatedById = "Mutayyab Imran";
             leaveApplication.StatusId = pendingStatus.Id;
             _context.Add(leaveApplication);
             await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
-            //}
+
             ViewData["DurationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveDuration"), "Id", "Description", leaveApplication.DurationId);
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName", leaveApplication.EmployeeId);
             ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name", leaveApplication.LeaveTypeId);

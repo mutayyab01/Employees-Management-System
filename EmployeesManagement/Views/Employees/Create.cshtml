@@ -189,8 +189,20 @@
                                 <span asp-validation-for="EmploymentTermsId" class="text-danger"></span>
                             </div>
                         </div>
-
-
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="DisabilityId" class="control-label"></label>
+                                <select asp-for="DisabilityId" class="form-control" asp-items="ViewBag.DisabilityId"></select>
+                                <span asp-validation-for="DisabilityId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="DisabilityCertificate" class="control-label"></label>
+                                <input asp-for="DisabilityCertificate" class="form-control" />
+                                <span asp-validation-for="DisabilityCertificate" class="text-danger"></span>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Photo" class="control-label"></label>

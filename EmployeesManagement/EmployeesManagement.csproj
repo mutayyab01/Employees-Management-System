@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\EmployeePictures\" />
+    <Folder Include="wwwroot\LeaveAttachments\" />
   </ItemGroup>
 
 </Project>

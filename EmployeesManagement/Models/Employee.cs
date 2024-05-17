@@ -70,6 +70,14 @@ namespace EmployeesManagement.Models
         public decimal? AllocatedLeaveDays { get; set; }
         [DisplayName("Leave Balance")]
         public decimal? LeaveOutStandingBalance { get; set; }
+        [DisplayName("Pays Tax")]
+        public bool? PaysTax { get; set; }
+
+        [DisplayName("Disability Type")]
+        public int? DisabilityId { get; set; }
+        public SystemCodeDetail Disability { get; set; }
+        public string? DisabilityCertificate { get; set; }
+
     }
 
 }
