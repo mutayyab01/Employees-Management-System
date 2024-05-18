@@ -1,14 +1,49 @@
-﻿@model IEnumerable<EmployeesManagement.Models.Employee>
+﻿@model EmployeesManagement.ViewModels.EmployeeViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Employees List";
 }
-
-
 
 <p>
     <a asp-action="Create" class="btn btn-primary"> <i class="fa fa-plus"></i> Add New Employee</a>
 </p>
+<div class="card">
+    <div class="card-body">
+        <div class="col-md-12">
+            <form asp-action="Index" method="post" enctype="multipart/form-data" class="form-vertical">
+                <div class="row">
+
+                    <div class="form-group col-md-4">
+                        <label asp-for="EmpNo" class="control-label"></label>
+                        <input asp-for="EmpNo" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="FullName" class="control-label"></label>
+                        <input asp-for="FullName" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="PhoneNumber" class="control-label"></label>
+                        <input asp-for="PhoneNumber" type="number" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="EmailAddress" class="control-label"></label>
+                        <input asp-for="EmailAddress" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-4 mt-4">
+                        <button type="submit" class="btn btn-success btn-block m-tb-10">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                    </div>
+                    <div class="form-group col-md-4 mt-4">
+                        <button type="button" id="clearButton" class="btn btn-default btn-block m-tb-10">
+                            <i class="fa fa-eraser"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Employees List</h3>
@@ -34,7 +69,7 @@
                         @Html.DisplayNameFor(model => model.LeaveOutStandingBalance)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Status)
+                        @Html.DisplayNameFor(model => model.StatusId)
                     </th>
 
                     <th>Edit</th>
@@ -43,7 +78,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var item in Model.Employees)
                 {
                     <tr>
                         <td>
@@ -84,3 +119,10 @@
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        document.getElementById("clearButton").addEventListener("click", function () {
+            document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"]').forEach(input => input.value = '');
+        });
+    </script>
+}

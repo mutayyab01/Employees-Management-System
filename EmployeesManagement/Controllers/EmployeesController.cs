@@ -9,6 +9,8 @@ using EmployeesManagement.Data;
 using EmployeesManagement.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Hosting;
+using EmployeesManagement.ViewModels;
+using AutoMapper;
 
 namespace EmployeesManagement.Controllers
 {
@@ -17,17 +19,41 @@ namespace EmployeesManagement.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment webHostEnvironment;
-        public EmployeesController(ApplicationDbContext context, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+        private readonly IMapper _mapper;
+        public EmployeesController(ApplicationDbContext context, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, IMapper mapper)
         {
             _context = context;
             _configuration = configuration;
             this.webHostEnvironment = webHostEnvironment;
+            _mapper = mapper;
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(EmployeeViewModel employees)
         {
-            return View(await _context.Employees.Include(x => x.Status).ToListAsync());
+            var rawdata = _context.Employees.Include(x => x.Status).AsQueryable();
+            if (!string.IsNullOrEmpty(employees.FullName.Trim()))
+            {
+                rawdata = rawdata
+                    .Where(x => x.FullName.Contains(employees.FullName));
+            }
+            if (Convert.ToInt32(employees.PhoneNumber) > 0)
+            {
+                rawdata = rawdata
+                    .Where(x => x.PhoneNumber == employees.PhoneNumber);
+            }
+            if (!string.IsNullOrEmpty(employees.EmailAddress))
+            {
+                rawdata = rawdata
+                    .Where(x => x.EmailAddress == employees.EmailAddress);
+            }
+            if (!string.IsNullOrEmpty(employees.EmpNo))
+            {
+                rawdata = rawdata
+                    .Where(x => x.EmpNo == employees.EmpNo);
+            }
+            employees.Employees = await rawdata.ToListAsync();
+            return View(employees);
         }
 
         // GET: Employees/Details/5
@@ -39,7 +65,7 @@ namespace EmployeesManagement.Controllers
             }
 
             var employee = await _context.Employees
-                .Include(x=>x.Status)
+                .Include(x => x.Status)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
@@ -67,8 +93,11 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Employee employee, IFormFile employeephoto)
+        public async Task<IActionResult> Create(EmployeeViewModel newemployee, IFormFile employeephoto)
         {
+            var employee = new Employee();
+            _mapper.Map(newemployee, employee);
+
             ViewData["DisabilityId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "DisabilityTypes"), "Id", "Description", employee.DisabilityId);
             ViewData["BankId"] = new SelectList(_context.Banks, "Id", "Name", employee.BankId);
             ViewData["EmploymentTermsId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "EmploymentTerms"), "Id", "Description", employee.EmploymentTermsId);
@@ -76,7 +105,10 @@ namespace EmployeesManagement.Controllers
             ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", employee.CountryId);
             ViewData["DesignationId"] = new SelectList(_context.Designations, "Id", "Name", employee.DesignationId);
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", employee.DepartmentId);
-            if (employeephoto!=null)
+
+
+
+            if (employeephoto != null)
             {
                 var ext = Path.GetExtension(employeephoto.FileName);
                 var size = employeephoto.Length;
@@ -116,7 +148,7 @@ namespace EmployeesManagement.Controllers
             _context.Add(employee);
             await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
-           
+
             return View(employee);
         }
 
