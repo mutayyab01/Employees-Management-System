@@ -61,12 +61,12 @@ namespace EmployeesManagement.Controllers
         public async Task<IActionResult> Create(SystemProfile systemProfile)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            systemProfile.CreatedById = "Mutayyab Imran";
-                systemProfile.CreatedOn = DateTime.Now;
-                _context.Add(systemProfile);
-                await _context.SaveChangesAsync(userId);
-                return RedirectToAction(nameof(Index));
-            
+            systemProfile.CreatedById = userId;
+            systemProfile.CreatedOn = DateTime.Now;
+            _context.Add(systemProfile);
+            await _context.SaveChangesAsync(userId);
+            return RedirectToAction(nameof(Index));
+
             ViewData["ProfileId"] = new SelectList(_context.SystemProfiles, "Id", "Name", systemProfile.ProfileId);
             return View(systemProfile);
         }
@@ -84,7 +84,7 @@ namespace EmployeesManagement.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProfileId"] = new SelectList(_context.SystemProfiles, "Id", "Id", systemProfile.ProfileId);
+            ViewData["ProfileId"] = new SelectList(_context.SystemProfiles, "Id", "Name", systemProfile.ProfileId);
             return View(systemProfile);
         }
 
@@ -95,32 +95,36 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ProfileId,Order,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] SystemProfile systemProfile)
         {
+            ViewData["ProfileId"] = new SelectList(_context.SystemProfiles, "Id", "Name", systemProfile.ProfileId);
+
             if (id != systemProfile.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(systemProfile);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SystemProfileExists(systemProfile.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                systemProfile.ModifiedById = userId;
+                systemProfile.ModifiedOn = DateTime.Now;
+                _context.Update(systemProfile);
+                await _context.SaveChangesAsync(userId);
             }
-            ViewData["ProfileId"] = new SelectList(_context.SystemProfiles, "Id", "Id", systemProfile.ProfileId);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SystemProfileExists(systemProfile.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+
             return View(systemProfile);
         }
 
