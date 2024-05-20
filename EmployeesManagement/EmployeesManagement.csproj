@@ -24,6 +24,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\EmployeePictures\" />
     <Folder Include="wwwroot\LeaveAttachments\" />
+    <Folder Include="wwwroot\CompanyLogo\" />
   </ItemGroup>
 
 </Project>
