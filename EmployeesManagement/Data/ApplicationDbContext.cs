@@ -46,6 +46,7 @@ namespace EmployeesManagement.Data
         public DbSet<LeaveAdjustmentEntry> LeaveAdjustmentEntries { get; set; }
         public DbSet<LeavePeriod> LeavePeriods { get; set; }
         public DbSet<CompanyInformation> CompanyInformations { get; set; }
+        public DbSet<ApprovalEntry> ApprovalEntries { get; set; }
 
 
         public virtual async Task<int> SaveChangesAsync(string userid = null)
