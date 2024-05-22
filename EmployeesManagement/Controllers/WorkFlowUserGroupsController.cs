@@ -23,7 +23,11 @@ namespace EmployeesManagement.Controllers
         // GET: WorkFlowUserGroups
         public async Task<IActionResult> Index()
         {
-            return View(await _context.WorkFlowUserGroups.ToListAsync());
+            var groups = await _context.WorkFlowUserGroups
+                .Include(x => x.Department)
+                .Include(x => x.DocumentType)
+                .ToListAsync();
+            return View(groups);
         }
 
         // GET: WorkFlowUserGroups/Details/5
@@ -47,6 +51,8 @@ namespace EmployeesManagement.Controllers
         // GET: WorkFlowUserGroups/Create
         public IActionResult Create()
         {
+            ViewData["DocumentTypeId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "DocumentTypes"), "Id", "Description");
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name");
             return View();
         }
 
@@ -55,15 +61,15 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Description")] WorkFlowUserGroup workFlowUserGroup)
+        public async Task<IActionResult> Create(WorkFlowUserGroup workFlowUserGroup)
         {
-            if (ModelState.IsValid)
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                _context.Add(workFlowUserGroup);
-                await _context.SaveChangesAsync(userId);
-                return RedirectToAction(nameof(Index));
-            }
+            ViewData["DocumentTypeId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "DocumentTypes"), "Id", "Description", workFlowUserGroup.DocumentTypeId);
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", workFlowUserGroup.DepartmentId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _context.Add(workFlowUserGroup);
+            await _context.SaveChangesAsync(userId);
+            return RedirectToAction(nameof(Index));
+
             return View(workFlowUserGroup);
         }
 

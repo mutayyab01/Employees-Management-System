@@ -18,6 +18,12 @@
                         @Html.DisplayNameFor(model => model.Code)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.DocumentTypeId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DepartmentId)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Description)
                     </th>
                     <th>Actions</th>
@@ -29,6 +35,12 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DocumentType.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Department.Name)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Description)
