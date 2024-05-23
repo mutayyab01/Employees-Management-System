@@ -48,6 +48,7 @@ namespace EmployeesManagement.Data
         public DbSet<CompanyInformation> CompanyInformations { get; set; }
         public DbSet<ApprovalEntry> ApprovalEntries { get; set; }
         public DbSet<WorkFlowUserGroup> WorkFlowUserGroups { get; set; }
+        public DbSet<ApprovalUserMatrix> ApprovalUserMatrixs { get; set; }
         public DbSet<WorkFlowUserGroupMember> WorkFlowUserGroupMembers { get; set; }
 
 

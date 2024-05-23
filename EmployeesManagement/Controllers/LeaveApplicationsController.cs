@@ -266,6 +266,9 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LeaveApplication leaveApplication, IFormFile leaveattachment)
         {
+            ViewData["DurationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveDuration"), "Id", "Description", leaveApplication.DurationId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName", leaveApplication.EmployeeId);
+            ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name", leaveApplication.LeaveTypeId);
             if (leaveattachment != null)
             {
                 var filename = "LeaveAttachment_" + DateTime.Now.ToString("dd-MM-yyyy hh mm ss tt") + "_" + leaveattachment.FileName;
@@ -282,13 +285,24 @@ namespace EmployeesManagement.Controllers
             leaveApplication.CreatedOn = DateTime.Now;
             leaveApplication.CreatedById = "Mutayyab Imran";
             leaveApplication.StatusId = pendingStatus.Id;
+
             _context.Add(leaveApplication);
             await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
 
-            ViewData["DurationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveDuration"), "Id", "Description", leaveApplication.DurationId);
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName", leaveApplication.EmployeeId);
-            ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name", leaveApplication.LeaveTypeId);
+            //Leave Type
+            var documenttype = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "LeaveApplication").FirstOrDefaultAsync();
+
+            //Workflow User Group
+            var usergroup = await _context.ApprovalUserMatrixs.Where(x => x.UserId == userId&&x.DocumentTypeId== documenttype.Id).FirstOrDefaultAsync();
+
+
+            //Generate an approval Entry
+            var approvalentries = new ApprovalEntry()
+            {
+
+            };
+           
             return View(leaveApplication);
         }
 
