@@ -7,66 +7,75 @@
 <h1>Details</h1>
 
 <div>
-    <h4>ApprovalEntry</h4>
+    <h4>Approval Entries</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RecordId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RecordId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DocumentType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DocumentType.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SequenceNo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SequenceNo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Approver)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Approver.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateSentForApproval)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateSentForApproval)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastModifiedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastModifiedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastModifiedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastModifiedBy.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Comments)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Comments)
-        </dd>
-    </dl>
+    <table class="table table-hover table-bordered table-striped">
+        <tr>
+            <th class="col-sm-3">
+                @Html.DisplayNameFor(model => model.RecordId)
+            </th>
+            <td class="col-sm-3">
+                @Html.DisplayFor(model => model.RecordId)
+            </td>
+            <th class="col-sm-3">
+                @Html.DisplayNameFor(model => model.DocumentType)
+            </th>
+            <td class="col-sm-3">
+                @Html.DisplayFor(model => model.DocumentType.Description)
+            </td>
+        </tr>
+        <tr>
+            <th class="col-sm-3">
+                @Html.DisplayNameFor(model => model.SequenceNo)
+            </th>
+            <td class="col-sm-3">
+                @Html.DisplayFor(model => model.SequenceNo)
+            </td>
+            <th class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Approver)
+            </th>
+            <td class="col-sm-3">
+                @Html.DisplayFor(model => model.Approver.FullName)
+            </td>
+        </tr>
+        <tr>
+            <th class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <td class="col-sm-3">
+                @Html.DisplayFor(model => model.Status.Description)
+            </td>
+            <th class="col-sm-3">
+                @Html.DisplayNameFor(model => model.DateSentForApproval)
+            </th>
+            <td class="col-sm-3">
+                @Html.DisplayFor(model => model.DateSentForApproval)
+            </td>
+        </tr>
+        <tr>
+            <th class="col-sm-3">
+                @Html.DisplayNameFor(model => model.LastModifiedOn)
+            </th>
+            <td class="col-sm-3">
+                @Html.DisplayFor(model => model.LastModifiedOn)
+            </td>
+            <th class="col-sm-3">
+                @Html.DisplayNameFor(model => model.LastModifiedBy)
+            </th>
+            <td class="col-sm-3">
+                @Html.DisplayFor(model => model.LastModifiedBy.FullName)
+            </td>
+        </tr>
+        <tr>
+            <th class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Comments)
+            </th>
+            <td class="col-sm-3">
+                @Html.DisplayFor(model => model.Comments)
+            </td>
+        </tr>
+    </table>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

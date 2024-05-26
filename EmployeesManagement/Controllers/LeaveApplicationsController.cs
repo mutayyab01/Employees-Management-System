@@ -288,21 +288,44 @@ namespace EmployeesManagement.Controllers
 
             _context.Add(leaveApplication);
             await _context.SaveChangesAsync(userId);
-            return RedirectToAction(nameof(Index));
+
 
             //Leave Type
-            var documenttype = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "LeaveApplication").FirstOrDefaultAsync();
+            var documenttype = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(x => x.SystemCode.Code == "DocumentTypes" && x.Code == "LeaveApplication").FirstOrDefaultAsync();
 
             //Workflow User Group
-            var usergroup = await _context.ApprovalUserMatrixs.Where(x => x.UserId == userId&&x.DocumentTypeId== documenttype.Id).FirstOrDefaultAsync();
+            var usergroup = await _context.ApprovalUserMatrixs.Where(x => x.UserId == userId && x.DocumentTypeId == documenttype.Id && x.Active == true).FirstOrDefaultAsync();
 
 
-            //Generate an approval Entry
-            var approvalentries = new ApprovalEntry()
+            var awaitingapproval = await _context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.Code == "AwaitingApproval" && y.SystemCode.Code == "LeaveApprovalStatus").FirstOrDefaultAsync();
+
+
+            // Approvers
+            var approvers = await _context.WorkFlowUserGroupMembers.Where(x => x.WorkFlowUserGroupId == usergroup.WorkflowUserGroupId && x.SenderId == userId).ToListAsync();
+
+            foreach (var approver in approvers)
             {
+                //Generate an approval Entry
+                var approvalentries = new ApprovalEntry()
+                {
+                    ApproverId = approver.ApproverId,
+                    DateSentForApproval = DateTime.Now,
+                    LastModifiedOn = DateTime.Now,
+                    LastModifiedById = approver.SenderId,
+                    RecordId = leaveApplication.Id,
+                    DocumentTypeId = documenttype.Id,
+                    SequenceNo = approver.SequenceNo,
+                    StatusId = awaitingapproval.Id,
+                    Comments = "Sent For Approvals",
+                };
 
-            };
-           
+
+                _context.Add(approvalentries);
+                await _context.SaveChangesAsync(userId);
+            }
+
+            return RedirectToAction(nameof(Index));
+
             return View(leaveApplication);
         }
 
