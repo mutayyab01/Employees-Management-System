@@ -4,6 +4,7 @@ using EmployeesManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeesManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240604173835_ControllerNameAPprovalEntry")]
+    partial class ControllerNameAPprovalEntry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,9 +141,8 @@ namespace EmployeesManagement.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ControllerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ControllerName")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateSentForApproval")
                         .HasColumnType("datetime2");
@@ -189,7 +191,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -198,7 +200,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -212,11 +214,7 @@ namespace EmployeesManagement.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("DocumentTypeId");
-
-                    b.HasIndex("ModifiedById");
 
                     b.HasIndex("UserId");
 
@@ -283,13 +281,13 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -299,10 +297,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("Banks");
                 });
@@ -404,13 +398,13 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -420,10 +414,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("Countries");
                 });
@@ -441,13 +431,13 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -457,10 +447,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("Departments");
                 });
@@ -478,13 +464,13 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -494,10 +480,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("Designations");
                 });
@@ -533,7 +515,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -595,7 +577,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -639,8 +621,6 @@ namespace EmployeesManagement.Data.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("DesignationId");
@@ -650,8 +630,6 @@ namespace EmployeesManagement.Data.Migrations
                     b.HasIndex("EmploymentTermsId");
 
                     b.HasIndex("GenderId");
-
-                    b.HasIndex("ModifiedById");
 
                     b.HasIndex("ReasonforTerminationId");
 
@@ -669,7 +647,7 @@ namespace EmployeesManagement.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -682,7 +660,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -695,10 +673,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("Holidays");
                 });
@@ -719,7 +693,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -740,7 +714,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -752,13 +726,9 @@ namespace EmployeesManagement.Data.Migrations
 
                     b.HasIndex("AdjustmentTypeId");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("LeavePeriodId");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("LeaveAdjustmentEntries");
                 });
@@ -775,7 +745,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApprovedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ApprovedOn")
                         .HasColumnType("datetime2");
@@ -784,7 +754,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -806,7 +776,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -822,17 +792,11 @@ namespace EmployeesManagement.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApprovedById");
-
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("DurationId");
 
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("LeaveTypeId");
-
-                    b.HasIndex("ModifiedById");
 
                     b.HasIndex("StatusId");
 
@@ -851,7 +815,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -867,7 +831,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -880,10 +844,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("LeavePeriods");
                 });
@@ -901,13 +861,13 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -917,10 +877,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("LeaveTypes");
                 });
@@ -962,7 +918,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -972,16 +928,12 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("SystemCodes");
                 });
@@ -999,7 +951,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -1009,7 +961,7 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -1021,10 +973,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.HasIndex("SystemCodeId");
 
@@ -1040,13 +988,13 @@ namespace EmployeesManagement.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -1062,10 +1010,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.HasIndex("ProfileId");
 
@@ -1316,21 +1260,11 @@ namespace EmployeesManagement.Data.Migrations
 
             modelBuilder.Entity("EmployeesManagement.Models.ApprovalUserMatrix", b =>
                 {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("EmployeesManagement.Models.SystemCodeDetail", "DocumentType")
                         .WithMany()
                         .HasForeignKey("DocumentTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EmployeesManagement.Models.ApplicationUser", "User")
                         .WithMany()
@@ -1344,32 +1278,11 @@ namespace EmployeesManagement.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("CreatedBy");
-
                     b.Navigation("DocumentType");
-
-                    b.Navigation("ModifiedBy");
 
                     b.Navigation("User");
 
                     b.Navigation("WorkflowUserGroup");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.Bank", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
                 });
 
             modelBuilder.Entity("EmployeesManagement.Models.City", b =>
@@ -1402,57 +1315,6 @@ namespace EmployeesManagement.Data.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("EmployeesManagement.Models.Country", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.Department", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.Designation", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
-                });
-
             modelBuilder.Entity("EmployeesManagement.Models.Employee", b =>
                 {
                     b.HasOne("EmployeesManagement.Models.Bank", "Bank")
@@ -1468,11 +1330,6 @@ namespace EmployeesManagement.Data.Migrations
                     b.HasOne("EmployeesManagement.Models.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EmployeesManagement.Models.Department", "Department")
@@ -1500,11 +1357,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasForeignKey("GenderId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("EmployeesManagement.Models.SystemCodeDetail", "ReasonforTermination")
                         .WithMany()
                         .HasForeignKey("ReasonforTerminationId")
@@ -1521,8 +1373,6 @@ namespace EmployeesManagement.Data.Migrations
 
                     b.Navigation("Country");
 
-                    b.Navigation("CreatedBy");
-
                     b.Navigation("Department");
 
                     b.Navigation("Designation");
@@ -1533,28 +1383,9 @@ namespace EmployeesManagement.Data.Migrations
 
                     b.Navigation("Gender");
 
-                    b.Navigation("ModifiedBy");
-
                     b.Navigation("ReasonforTermination");
 
                     b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.Holiday", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
                 });
 
             modelBuilder.Entity("EmployeesManagement.Models.LeaveAdjustmentEntry", b =>
@@ -1564,11 +1395,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasForeignKey("AdjustmentTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EmployeesManagement.Models.Employee", "Employee")
                         .WithMany()
@@ -1581,34 +1407,15 @@ namespace EmployeesManagement.Data.Migrations
                         .HasForeignKey("LeavePeriodId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("AdjustmentType");
-
-                    b.Navigation("CreatedBy");
 
                     b.Navigation("Employee");
 
                     b.Navigation("LeavePeriod");
-
-                    b.Navigation("ModifiedBy");
                 });
 
             modelBuilder.Entity("EmployeesManagement.Models.LeaveApplication", b =>
                 {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ApprovedBy")
-                        .WithMany()
-                        .HasForeignKey("ApprovedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("EmployeesManagement.Models.SystemCodeDetail", "Duration")
                         .WithMany()
                         .HasForeignKey("DurationId")
@@ -1627,20 +1434,11 @@ namespace EmployeesManagement.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("EmployeesManagement.Models.SystemCodeDetail", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ApprovedBy");
-
-                    b.Navigation("CreatedBy");
 
                     b.Navigation("Duration");
 
@@ -1648,43 +1446,7 @@ namespace EmployeesManagement.Data.Migrations
 
                     b.Navigation("LeaveType");
 
-                    b.Navigation("ModifiedBy");
-
                     b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.LeavePeriod", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.LeaveType", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
                 });
 
             modelBuilder.Entity("EmployeesManagement.Models.RoleProfile", b =>
@@ -1706,68 +1468,23 @@ namespace EmployeesManagement.Data.Migrations
                     b.Navigation("Task");
                 });
 
-            modelBuilder.Entity("EmployeesManagement.Models.SystemCode", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
-                });
-
             modelBuilder.Entity("EmployeesManagement.Models.SystemCodeDetail", b =>
                 {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("EmployeesManagement.Models.SystemCode", "SystemCode")
                         .WithMany()
                         .HasForeignKey("SystemCodeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
-
                     b.Navigation("SystemCode");
                 });
 
             modelBuilder.Entity("EmployeesManagement.Models.SystemProfile", b =>
                 {
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EmployeesManagement.Models.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("EmployeesManagement.Models.SystemProfile", "Profile")
                         .WithMany("Childern")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
 
                     b.Navigation("Profile");
                 });

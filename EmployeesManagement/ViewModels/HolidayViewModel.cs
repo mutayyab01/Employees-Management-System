@@ -7,7 +7,7 @@ namespace EmployeesManagement.ViewModels
     public class HolidayViewModel : UserActivity
     {
         public int Id { get; set; }
-        [DisplayName("Title ")]
+        [DisplayName("Holiday Name")]
         public string Title { get; set; }
         [DisplayName("Start Date ")]
         [DisplayFormat(ApplyFormatInEditMode = true,DataFormatString = "{0:yyyy/MM/dd}")]

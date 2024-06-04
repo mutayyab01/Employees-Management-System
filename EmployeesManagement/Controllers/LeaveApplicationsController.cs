@@ -313,6 +313,7 @@ namespace EmployeesManagement.Controllers
                     LastModifiedOn = DateTime.Now,
                     LastModifiedById = approver.SenderId,
                     RecordId = leaveApplication.Id,
+                    ControllerName = "LeaveApplications",
                     DocumentTypeId = documenttype.Id,
                     SequenceNo = approver.SequenceNo,
                     StatusId = awaitingapproval.Id,

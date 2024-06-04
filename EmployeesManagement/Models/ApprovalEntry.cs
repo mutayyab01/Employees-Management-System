@@ -27,5 +27,7 @@ namespace EmployeesManagement.Models
         public ApplicationUser LastModifiedBy { get; set; }
         [DisplayName("Comments")]
         public string Comments { get; set; }
+        [DisplayName("Controller Name")]
+        public string ControllerName { get; set; } 
     }
 }

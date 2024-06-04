@@ -80,7 +80,7 @@
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-eye"></i> View</a>
                         </td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@item.RecordId" asp-controller="LeaveApplications" class="btn btn-secondary"><i class="fa fa-folder"></i> Open</a>
+                            <a asp-action="Details" asp-route-id="@item.RecordId" asp-controller="@item.ControllerName" class="btn btn-secondary"><i class="fa fa-folder"></i> Open</a>
                         </td>
                         <td>
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary"><i class="fa fa-check"></i> Approve</a>
