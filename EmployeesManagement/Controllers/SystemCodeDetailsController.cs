@@ -37,6 +37,7 @@ namespace EmployeesManagement.Controllers
 
             var systemCodeDetail = await _context.SystemCodeDetails
                 .Include(s => s.SystemCode)
+                .Include(s => s.CreatedBy)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (systemCodeDetail == null)
             {
