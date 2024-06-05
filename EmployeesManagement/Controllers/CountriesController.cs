@@ -25,7 +25,6 @@ namespace EmployeesManagement.Controllers
         {
             return View(await _context.Countries
                 .Include(x => x.CreatedBy)
-
                 .ToListAsync());
         }
 
@@ -65,7 +64,8 @@ namespace EmployeesManagement.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             country.CreatedById = userId;
             country.CreatedOn = DateTime.Now;
-
+            TempData["CreatedById"] = country.CreatedById;
+            TempData["CreatedOn"] = country.CreatedOn;
             _context.Add(country);
             await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
@@ -107,6 +107,9 @@ namespace EmployeesManagement.Controllers
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 country.ModifiedById = userId;
                 country.ModifiedOn = DateTime.Now;
+                country.CreatedById = Convert.ToString(TempData["CreatedById"]);
+                country.CreatedOn = Convert.ToDateTime(TempData["CreatedOn"]);
+
                 _context.Update(country);
                 await _context.SaveChangesAsync(userId);
             }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EmployeesManagement.Data;
 using EmployeesManagement.Models;
+using System.Security.Claims;
 
 namespace EmployeesManagement.Controllers
 {
@@ -22,7 +23,10 @@ namespace EmployeesManagement.Controllers
         // GET: Banks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Banks.ToListAsync());
+            return View(await _context.Banks
+                .Include(x => x.CreatedBy)
+                .Include(x => x.ModifiedBy)
+                .ToListAsync());
         }
 
         // GET: Banks/Details/5
@@ -34,6 +38,8 @@ namespace EmployeesManagement.Controllers
             }
 
             var bank = await _context.Banks
+                .Include(x => x.CreatedBy)
+                .Include(x => x.ModifiedBy)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (bank == null)
             {
@@ -54,14 +60,15 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Name,AccountNo,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] Bank bank)
+        public async Task<IActionResult> Create(Bank bank)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(bank);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            bank.CreatedById = userId;
+            bank.CreatedOn = DateTime.Now;
+            _context.Add(bank);
+            await _context.SaveChangesAsync(userId);
+            return RedirectToAction(nameof(Index));
+
             return View(bank);
         }
 
@@ -86,33 +93,35 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Name,AccountNo,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] Bank bank)
+        public async Task<IActionResult> Edit(int id, Bank bank)
         {
             if (id != bank.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(bank);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BankExists(bank.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                bank.ModifiedById = userId;
+                bank.ModifiedOn = DateTime.Now;
+                _context.Update(bank);
+                await _context.SaveChangesAsync(userId);
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BankExists(bank.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
             return View(bank);
         }
 
@@ -139,13 +148,13 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var bank = await _context.Banks.FindAsync(id);
             if (bank != null)
             {
                 _context.Banks.Remove(bank);
             }
-
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
         }
 
