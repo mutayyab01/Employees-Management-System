@@ -4,63 +4,49 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1 class="text-center">@ViewData["Title"]</h1>
 
-<div>
-    <h4>LeaveAdjustmentEntry</h4>
+<div class="container-fluid">
+    <h4 class="text-center">Leave Adjustment Entry</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LeavePeriod)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LeavePeriod)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Employee)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Employee.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NoOfDays)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NoOfDays)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LeaveAdjustmentDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LeaveAdjustmentDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LeaveStartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LeaveStartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LeaveEndDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LeaveEndDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AdjustmentDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AdjustmentDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AdjustmentType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AdjustmentType.Id)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <table class="table table-bordered yable-striped">
+        <thead>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+                <th>Field</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.LeavePeriod)</th>
+                <td>@Html.DisplayFor(model => model.LeavePeriod)</td>
+                <th>@Html.DisplayNameFor(model => model.Employee)</th>
+                <td>@Html.DisplayFor(model => model.Employee.Id)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.NoOfDays)</th>
+                <td>@Html.DisplayFor(model => model.NoOfDays)</td>
+                <th>@Html.DisplayNameFor(model => model.LeaveAdjustmentDate)</th>
+                <td>@Html.DisplayFor(model => model.LeaveAdjustmentDate)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.LeaveStartDate)</th>
+                <td>@Html.DisplayFor(model => model.LeaveStartDate)</td>
+                <th>@Html.DisplayNameFor(model => model.LeaveEndDate)</th>
+                <td>@Html.DisplayFor(model => model.LeaveEndDate)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.AdjustmentDescription)</th>
+                <td>@Html.DisplayFor(model => model.AdjustmentDescription)</td>
+                <th>@Html.DisplayNameFor(model => model.AdjustmentType)</th>
+                <td>@Html.DisplayFor(model => model.AdjustmentType.Id)</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center mt-3">
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+    </div>
 </div>

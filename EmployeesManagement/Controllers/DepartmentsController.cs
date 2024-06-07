@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EmployeesManagement.Data;
 using EmployeesManagement.Models;
+using System.Security.Claims;
 
 namespace EmployeesManagement.Controllers
 {
@@ -22,7 +23,10 @@ namespace EmployeesManagement.Controllers
         // GET: Departments
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Departments.ToListAsync());
+            return View(await _context.Departments
+                .Include(x => x.CreatedBy)
+                .Include(x => x.ModifiedBy)
+                .ToListAsync());
         }
 
         // GET: Departments/Details/5
@@ -54,14 +58,16 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Name,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] Department department)
+        public async Task<IActionResult> Create(Department department)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(department);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            department.CreatedById = userId;
+            department.CreatedOn = DateTime.Now;
+
+            _context.Add(department);
+            await _context.SaveChangesAsync(userId);
+            return RedirectToAction(nameof(Index));
+
             return View(department);
         }
 
@@ -86,33 +92,36 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Name,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] Department department)
+        public async Task<IActionResult> Edit(int id, Department department)
         {
             if (id != department.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(department);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DepartmentExists(department.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                department.ModifiedById = userId;
+                department.ModifiedOn = DateTime.Now;
+
+                _context.Update(department);
+                await _context.SaveChangesAsync(userId);
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DepartmentExists(department.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
             return View(department);
         }
 
@@ -139,13 +148,14 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var department = await _context.Departments.FindAsync(id);
             if (department != null)
             {
                 _context.Departments.Remove(department);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
         }
 
