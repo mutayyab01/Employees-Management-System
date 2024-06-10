@@ -36,7 +36,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.ModifiedOn)
                     </th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,7 +50,7 @@
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CreatedById)
+                            @Html.DisplayFor(modelItem => item.CreatedBy.FullName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.CreatedOn)
@@ -62,10 +62,24 @@
                             @Html.DisplayFor(modelItem => item.ModifiedOn)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <div class="input-group input-group-lg mb-3">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-item"><a asp-action="SystemCodeDetails" asp-route-id="@item.Id" class="btn btn-secondary">System Codes</a></li>
+                                        <li class="dropdown-divider"></li>
+                                        <li class="dropdown-item"><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"> <i class="fa fa-edit"></i> Edit</a> </li>
+                                        <li class="dropdown-divider"></li
+                                        <li class="dropdown-item"> &nbsp;&nbsp;&nbsp;&nbsp; <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning"> <i class="fa fa-eye"></i> Details</a> </li>
+                                        <li class="dropdown-divider"></li>
+                                        <li class="dropdown-item"><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"> <i class="fa fa-trash"></i> Delete</a> </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </td>
+                       
                     </tr>
                 }
             </tbody>

@@ -23,9 +23,18 @@ namespace EmployeesManagement.Controllers
         // GET: SystemCodes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SystemCodes.ToListAsync());
+            return View(await _context.SystemCodes
+                   .Include(s => s.CreatedBy)
+                .ToListAsync());
         }
-
+        public async Task<IActionResult> SystemCodeDetails(int id)
+        {
+            return View(await _context.SystemCodeDetails
+                .Include(x => x.SystemCode)
+                   .Include(s => s.CreatedBy)
+                   .Where(x => x.SystemCodeId == id)
+                .ToListAsync());
+        }
         // GET: SystemCodes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -35,7 +44,7 @@ namespace EmployeesManagement.Controllers
             }
 
             var systemCode = await _context.SystemCodes
-                .Include(x=>x.CreatedBy)
+                .Include(x => x.CreatedBy)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (systemCode == null)
             {
@@ -90,33 +99,35 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] SystemCode systemCode)
+        public async Task<IActionResult> Edit(int id, SystemCode systemCode)
         {
             if (id != systemCode.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(systemCode);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SystemCodeExists(systemCode.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                systemCode.ModifiedOn = DateTime.Now;
+                systemCode.ModifiedById = userId;
+                _context.Update(systemCode);
+                await _context.SaveChangesAsync(userId);
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SystemCodeExists(systemCode.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
             return View(systemCode);
         }
 
@@ -144,12 +155,13 @@ namespace EmployeesManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var systemCode = await _context.SystemCodes.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (systemCode != null)
             {
                 _context.SystemCodes.Remove(systemCode);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
         }
 

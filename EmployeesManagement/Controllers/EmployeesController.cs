@@ -235,12 +235,13 @@ namespace EmployeesManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var employee = await _context.Employees.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (employee != null)
             {
                 _context.Employees.Remove(employee);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
         }
 

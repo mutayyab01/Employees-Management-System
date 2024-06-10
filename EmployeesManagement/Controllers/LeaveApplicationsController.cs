@@ -421,12 +421,13 @@ namespace EmployeesManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var leaveApplication = await _context.LeaveApplications.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (leaveApplication != null)
             {
                 _context.LeaveApplications.Remove(leaveApplication);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
         }
 

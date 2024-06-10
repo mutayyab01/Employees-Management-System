@@ -101,7 +101,7 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,WorkFlowUserGroupId,SenderId,ApproverId,SequenceNo")] WorkFlowUserGroupMember workFlowUserGroupMember)
+        public async Task<IActionResult> Edit(int id, WorkFlowUserGroupMember workFlowUserGroupMember)
         {
             if (id != workFlowUserGroupMember.Id)
             {
@@ -162,12 +162,13 @@ namespace EmployeesManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var workFlowUserGroupMember = await _context.WorkFlowUserGroupMembers.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (workFlowUserGroupMember != null)
             {
                 _context.WorkFlowUserGroupMembers.Remove(workFlowUserGroupMember);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
         }
 

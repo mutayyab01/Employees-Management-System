@@ -23,7 +23,9 @@ namespace EmployeesManagement.Controllers
         // GET: SystemCodeDetails
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SystemCodeDetails.Include(s => s.SystemCode);
+            var applicationDbContext = _context.SystemCodeDetails
+                .Include(s => s.SystemCode)
+                .Include(s => s.CreatedBy);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -61,8 +63,7 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SystemCodeDetail systemCodeDetail)
         {
-            //if (ModelState.IsValid)
-            //{
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             systemCodeDetail.CreatedOn = DateTime.Now;
             systemCodeDetail.CreatedById = userId;
@@ -70,7 +71,7 @@ namespace EmployeesManagement.Controllers
             _context.Add(systemCodeDetail);
             await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
-            //}
+
             ViewData["SystemCodeId"] = new SelectList(_context.SystemCodes, "Id", "Description", systemCodeDetail.SystemCodeId);
             return View(systemCodeDetail);
         }
@@ -104,26 +105,29 @@ namespace EmployeesManagement.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(systemCodeDetail);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SystemCodeDetailExists(systemCodeDetail.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                systemCodeDetail.ModifiedOn = DateTime.Now;
+                systemCodeDetail.ModifiedById = userId;
+
+                _context.Update(systemCodeDetail);
+                await _context.SaveChangesAsync(userId);
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SystemCodeDetailExists(systemCodeDetail.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
             ViewData["SystemCodeId"] = new SelectList(_context.SystemCodes, "Id", "Id", systemCodeDetail.SystemCodeId);
             return View(systemCodeDetail);
         }
@@ -153,12 +157,14 @@ namespace EmployeesManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var systemCodeDetail = await _context.SystemCodeDetails.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (systemCodeDetail != null)
             {
                 _context.SystemCodeDetails.Remove(systemCodeDetail);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
         }
 

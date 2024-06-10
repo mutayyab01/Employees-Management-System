@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using EmployeesManagement.Data;
 using EmployeesManagement.Models;
 using System.Security.Claims;
+using EmployeesManagement.Data.Migrations;
 
 namespace EmployeesManagement.Controllers
 {
@@ -61,9 +62,9 @@ namespace EmployeesManagement.Controllers
             leavePeriod.CreatedById = userId;
             leavePeriod.CreatedOn = DateTime.Now;
             _context.Add(leavePeriod);
-                await _context.SaveChangesAsync(userId);
-                return RedirectToAction(nameof(Index));
-            
+            await _context.SaveChangesAsync(userId);
+            return RedirectToAction(nameof(Index));
+
             return View(leavePeriod);
         }
 
@@ -88,33 +89,35 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,StartDate,EndDate,Closed,Locked,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] LeavePeriod leavePeriod)
+        public async Task<IActionResult> Edit(int id, LeavePeriod leavePeriod)
         {
             if (id != leavePeriod.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(leavePeriod);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LeavePeriodExists(leavePeriod.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                leavePeriod.ModifiedById = userId;
+                leavePeriod.ModifiedOn = DateTime.Now;
+                _context.Update(leavePeriod);
+                await _context.SaveChangesAsync(userId);
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LeavePeriodExists(leavePeriod.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
             return View(leavePeriod);
         }
 
@@ -142,12 +145,13 @@ namespace EmployeesManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var leavePeriod = await _context.LeavePeriods.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (leavePeriod != null)
             {
                 _context.LeavePeriods.Remove(leavePeriod);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
         }
 

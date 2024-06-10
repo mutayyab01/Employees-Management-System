@@ -66,7 +66,7 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CompanyInformation companyInformation,IFormFile logo)
+        public async Task<IActionResult> Create(CompanyInformation companyInformation, IFormFile logo)
         {
             ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", companyInformation.CityId);
             ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", companyInformation.CountryId);
@@ -140,33 +140,33 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Address,PhoneNo,NSSFNO,NHIFNO,KRAPIN,ContactPerson,Logo,PostalCode,CityId,CountryId")] CompanyInformation companyInformation)
+        public async Task<IActionResult> Edit(int id, CompanyInformation companyInformation)
         {
             if (id != companyInformation.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(companyInformation);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CompanyInformationExists(companyInformation.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                _context.Update(companyInformation);
+                await _context.SaveChangesAsync(userId);
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CompanyInformationExists(companyInformation.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
             ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", companyInformation.CityId);
             ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", companyInformation.CountryId);
             return View(companyInformation);
@@ -198,12 +198,13 @@ namespace EmployeesManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var companyInformation = await _context.CompanyInformations.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (companyInformation != null)
             {
                 _context.CompanyInformations.Remove(companyInformation);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
         }
 

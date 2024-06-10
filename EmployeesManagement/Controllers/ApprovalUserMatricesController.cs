@@ -51,7 +51,7 @@ namespace EmployeesManagement.Controllers
         // GET: ApprovalUserMatrices/Create
         public IActionResult Create()
         {
-            ViewData["DocumentTypeId"] = new SelectList(_context.SystemCodeDetails.Include(x=>x.SystemCode).Where(y=>y.SystemCode.Code=="DocumentTypes"), "Id", "Description");
+            ViewData["DocumentTypeId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "DocumentTypes"), "Id", "Description");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName");
             ViewData["WorkflowUserGroupId"] = new SelectList(_context.WorkFlowUserGroups, "Id", "Description");
             return View();
@@ -103,33 +103,35 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,DocumentTypeId,WorkflowUserGroupId,Active,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] ApprovalUserMatrix approvalUserMatrix)
+        public async Task<IActionResult> Edit(int id, ApprovalUserMatrix approvalUserMatrix)
         {
             if (id != approvalUserMatrix.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(approvalUserMatrix);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ApprovalUserMatrixExists(approvalUserMatrix.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                approvalUserMatrix.ModifiedById = userId;
+                approvalUserMatrix.ModifiedOn = DateTime.Now;
+                _context.Update(approvalUserMatrix);
+                await _context.SaveChangesAsync(userId);
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ApprovalUserMatrixExists(approvalUserMatrix.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
             ViewData["DocumentTypeId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "DocumentTypes"), "Id", "Description");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", approvalUserMatrix.UserId);
             ViewData["WorkflowUserGroupId"] = new SelectList(_context.WorkFlowUserGroups, "Id", "Description", approvalUserMatrix.WorkflowUserGroupId);
@@ -163,12 +165,13 @@ namespace EmployeesManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var approvalUserMatrix = await _context.ApprovalUserMatrixs.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (approvalUserMatrix != null)
             {
                 _context.ApprovalUserMatrixs.Remove(approvalUserMatrix);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(userId);
             return RedirectToAction(nameof(Index));
         }
 

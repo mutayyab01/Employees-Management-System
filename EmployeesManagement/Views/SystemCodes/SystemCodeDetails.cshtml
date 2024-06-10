@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 <p>
-    <a asp-action="Create" class="btn btn-primary"> <i class="fa fa-plus"></i> Add New System Details</a>
+    <a asp-action="Create" asp-controller="SystemCodeDetails" class="btn btn-primary"> <i class="fa fa-plus"></i> Add New System Details</a>
 </p>
 <div class="card">
     <div class="card-header">
@@ -39,7 +39,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.ModifiedOn)
                     </th>
-                    <th>Actions</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -70,22 +70,10 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.ModifiedOn)
                         </td>
-                             <td>
-                            <div class="input-group input-group-lg mb-3">
-                                <div class="input-group-prepend">
-                                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
-                                        Action
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown-divider"></li>
-                                        <li class="dropdown-item"><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"> <i class="fa fa-edit"></i> Edit</a> </li>
-                                        <li class="dropdown-divider"></li
-                                        <li class="dropdown-item"> &nbsp;&nbsp;&nbsp;&nbsp; <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning"> <i class="fa fa-eye"></i> Details</a> </li>
-                                        <li class="dropdown-divider"></li>
-                                        <li class="dropdown-item"><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"> <i class="fa fa-trash"></i> Delete</a> </li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <td>
+                            <a asp-action="Edit" asp-controller="SystemCodeDetails" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-controller="SystemCodeDetails" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-controller="SystemCodeDetails" asp-route-id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }

@@ -57,16 +57,15 @@ namespace EmployeesManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Code,Name,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] LeaveType leaveType)
         {
-            if (ModelState.IsValid)
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                leaveType.CreatedById = userId;
-                leaveType.CreatedOn = DateTime.Now;
 
-                _context.Add(leaveType);
-                await _context.SaveChangesAsync(userId);
-                return RedirectToAction(nameof(Index));
-            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            leaveType.CreatedById = userId;
+            leaveType.CreatedOn = DateTime.Now;
+
+            _context.Add(leaveType);
+            await _context.SaveChangesAsync(userId);
+            return RedirectToAction(nameof(Index));
+
             return View(leaveType);
         }
 
@@ -91,38 +90,36 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Name,CreatedById,CreatedOn,ModifiedById,ModifiedOn")] LeaveType leaveType)
+        public async Task<IActionResult> Edit(int id, LeaveType leaveType)
         {
             if (id != leaveType.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    //Get Old Values
-                    var oldleavetype = await _context.LeaveTypes.FindAsync(id);
-                    leaveType.ModifiedOn = DateTime.Now;
-                    leaveType.ModifiedById = userId;
-                    _context.Entry(oldleavetype).CurrentValues.SetValues(leaveType);
-                    await _context.SaveChangesAsync(userId);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LeaveTypeExists(leaveType.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                //Get Old Values
+                var oldleavetype = await _context.LeaveTypes.FindAsync(id);
+                leaveType.ModifiedOn = DateTime.Now;
+                leaveType.ModifiedById = userId;
+                _context.Entry(oldleavetype).CurrentValues.SetValues(leaveType);
+                await _context.SaveChangesAsync(userId);
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LeaveTypeExists(leaveType.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
             return View(leaveType);
         }
 
